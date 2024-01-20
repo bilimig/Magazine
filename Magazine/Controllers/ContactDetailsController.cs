@@ -28,8 +28,20 @@ namespace Magazine.Controllers
             return Ok(contact_details);
         }
 
-        [HttpGet("GetContactDetails")]
-        public IActionResult GetContactDetails(int client_id)
+        [HttpGet("ContactDetailsById/{client_id}")]
+        public IActionResult UomGetById(int details_id)
+        {
+            var details = _context.ContactDetails.Find(details_id);
+            if (details == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(details);
+        }
+
+        [HttpGet("GetContactDetailsByClientId")]
+        public IActionResult GetContactDetailsByClientId(int client_id)
         {
             var client = _context.Clients.Find(client_id);
             if (client == null)
@@ -47,13 +59,13 @@ namespace Magazine.Controllers
             return Ok(contact_details);
         }
 
-        [HttpDelete("DeleteOrders/{id}")]
-        public void DeleteOrder(int id)
+        [HttpDelete("DeleteContactDetails/{id}")]
+        public void DeleteContactDetails(int id)
         {
-            var cleaningHistory = _context.Orders.FirstOrDefault(r => r.Id == id);
-            if (cleaningHistory != null)
+            var deatails = _context.ContactDetails.FirstOrDefault(r => r.Id == id);
+            if (deatails != null)
             {
-                _context.Orders.Remove(cleaningHistory);
+                _context.ContactDetails.Remove(deatails);
                 _context.SaveChanges();
             }
         }
