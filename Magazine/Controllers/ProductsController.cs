@@ -29,14 +29,6 @@ namespace Magazine.Controllers
             return Ok(product);
         }
 
-        [HttpDelete("DeleteProduct/{product}")]
-        public Product DeleteProduct(Product product)
-        {
-            _context.Products.Remove(product);
-            _context.SaveChanges();
-
-            return product;
-        }
         [HttpPut("UpdateProductAmount/{product_id}/{amount}")]
         public IActionResult UpdateProductAmount(int  product_id, int amount)
         {
@@ -52,13 +44,13 @@ namespace Magazine.Controllers
 
         }
 
-        [HttpGet("GetAllProductCleaningHistories")]
-        public List<Product> GetAllProductCleaningHistories()
+        [HttpGet("GetAllProducts")]
+        public List<Product> GetAllProducts()
         {
             return _context.Products.ToList();
         }
-        [HttpGet("GetProductCleaningHistoryById")]
-        public IActionResult GetProductCleaningHistoryById(int id)
+        [HttpGet("GetProductId")]
+        public IActionResult GetProductById(int id)
         {
             if (_context.Products.FirstOrDefault(r => r.Id == id) == null)
             {
@@ -68,20 +60,21 @@ namespace Magazine.Controllers
             return Ok(_context.Products.FirstOrDefault(r => r.Id == id));
         }
 
-        [HttpGet("GetProductCleaningHistoriesByFilter/{filter}")]
-        public List<Product> GetProductCleaningHistoriesByFilter(Expression<Func<Product, bool>> filter)
+        [HttpGet("GetProductsByFilter/{filter}")]
+        public List<Product> GetProductsByFilter(Expression<Func<Product, bool>> filter)
         {
             return _context.Products.Where(filter).ToList();
         }
-        [HttpGet("UpdateProductCleaningHistory/{cleaningHistory}")]
-        public Product UpdateProductCleaningHistory(Product cleaningHistory)
+        [HttpGet("UpdateProduct/{product}")]
+        public Product UpdateProduct(Product product)
         {
-            _context.Products.Update(cleaningHistory);
+            _context.Products.Update(product);
             _context.SaveChanges();
-            return cleaningHistory;
+            return product;
         }
-        [HttpDelete("DeleteProductCleaningHistory/{id}")]
-        public void DeleteProductCleaningHistory(int id)
+
+        [HttpDelete("DeleteProduct/{id}")]
+        public void DeleteProduct(int id)
         {
             var cleaningHistory = _context.Products.FirstOrDefault(r => r.Id == id);
             if (cleaningHistory != null)
