@@ -17,6 +17,21 @@ namespace Magazine.Controllers
 
         }
 
+        [HttpPost("AddOrder")]
+        public IActionResult AddOrder([FromBody] Order order)
+        {
+            if (order == null)
+            {
+                return BadRequest();
+            }
+
+            _context.Orders.Add(order);
+            _context.SaveChanges();
+
+
+            return Ok(order);
+        }
+
         [HttpGet("GetOrder/{order_id}")]
         public IActionResult GetOrder(int order_id)
         {
@@ -30,8 +45,8 @@ namespace Magazine.Controllers
             return Ok(order); 
         }
 
-        [HttpGet("GetOrderStatus/{order_id}")]
-        public IActionResult GetOrderStatus(int order_id)
+        [HttpGet("GetOrderStatusByOrderId/{order_id}")]
+        public IActionResult GetOrderStatusByOrderId(int order_id)
         {
             var current_order = _context.Orders.Find(order_id);
             if (current_order == null) { return NotFound(); }
@@ -49,6 +64,27 @@ namespace Magazine.Controllers
             return Ok(current_status);
 
         }
+
+        [HttpGet("GetOrderTypeByOrderId/{order_id}")]
+        public IActionResult GetOrderTypeByOrderId(int order_id)
+        {
+            var current_order = _context.Orders.Find(order_id);
+            if (current_order == null) { return NotFound(); }
+
+            int status_id = current_order.TypeId.Value;
+
+
+            var current_type = _context.OrderTypes.Find(status_id);
+
+            if (current_type == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(current_type);
+
+        }
+
 
         [HttpPut("UpdateOrderStatus/{orderId}/{newStatusId}")]
         public IActionResult UpdateOrderStatus(int orderId, int newStatusId)
@@ -93,7 +129,7 @@ namespace Magazine.Controllers
             return _context.Orders.Where(filter).ToList();
         }
         [HttpGet("UpdateOrder/{order}")]
-        public Order UpdateOrderCleaningHistory(Order order)
+        public Order UpdateOrder(Order order)
         {
             _context.Orders.Update(order);
             _context.SaveChanges();
