@@ -78,9 +78,7 @@ namespace Magazine.Controllers
             {
                 return BadRequest();
             }
-            var product_id = product.Id;
-
-            if (_context.Products.Find(product_id) == null)
+            if (_context.Products.Find(product.Id) == null)
             {
                 return NotFound();
             }
