@@ -21,6 +21,7 @@ namespace Magazine.Controllers
         public IActionResult GetOrder(int order_id)
         {
             var order = _context.Orders.Find(order_id);
+            
             if(order == null)
             {
                 return NotFound();
@@ -29,14 +30,15 @@ namespace Magazine.Controllers
             return Ok(order); 
         }
 
-        [HttpGet("GetOrderStatus/{order}")]
-        public IActionResult GetOrderStatus(Order order)
+        [HttpGet("GetOrderStatus/{order_id}")]
+        public IActionResult GetOrderStatus(int order_id)
         {
-            var current_order = _context.Orders.Find(order);
+            var current_order = _context.Orders.Find(order_id);
             if (current_order == null) { return NotFound(); }
 
             int status_id = current_order.StatusId.Value; 
             
+
             var current_status = _context.OrderStatuses.Find(status_id);
 
             if (current_status == null)
@@ -96,15 +98,15 @@ namespace Magazine.Controllers
             _context.Orders.Update(order);
             _context.SaveChanges();
             return order;
-        }
+        }//zapytac czy git
 
         [HttpDelete("DeleteOrder/{id}")]
         public void DeleteOrder(int id)
         {
-            var cleaningHistory = _context.Orders.FirstOrDefault(r => r.Id == id);
-            if (cleaningHistory != null)
+            var order = _context.Orders.FirstOrDefault(r => r.Id == id);
+            if (order != null)
             {
-                _context.Orders.Remove(cleaningHistory);
+                _context.Orders.Remove(order);
                 _context.SaveChanges();
             }
         }
