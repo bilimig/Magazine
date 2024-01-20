@@ -8,25 +8,27 @@ namespace Magazine.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class OrderController : ControllerBase
+    public class OrdersController : ControllerBase
     {
         private readonly MagazineContext _context;
-
-        public OrderController(MagazineContext context)
+        public OrdersController(MagazineContext context)
         {
             _context = context;
 
         }
 
-        [HttpPost ("AddNewOrder")]
-        public IActionResult AddNewOrder ([FromBody]Order order)
+        [HttpPost("AddOrder")]
+        public IActionResult AddOrder([FromBody] Order order)
         {
             if (order == null)
             {
                 return BadRequest();
             }
-            _context.Orders.Add (order);
+
+            _context.Orders.Add(order);
             _context.SaveChanges();
+
+
             return Ok(order);
         }
 
@@ -34,6 +36,7 @@ namespace Magazine.Controllers
         public IActionResult GetOrder(int order_id)
         {
             var order = _context.Orders.Find(order_id);
+            
             if(order == null)
             {
                 return NotFound();
@@ -41,9 +44,16 @@ namespace Magazine.Controllers
 
             return Ok(order); 
         }
-        [HttpGet("GetOrderStatus/{status_id}")]
-        public IActionResult GetOrderStatus(int status_id)
+
+        [HttpGet("GetOrderStatusByOrderId/{order_id}")]
+        public IActionResult GetOrderStatusByOrderId(int order_id)
         {
+            var current_order = _context.Orders.Find(order_id);
+            if (current_order == null) { return NotFound(); }
+
+            int status_id = current_order.StatusId.Value; 
+            
+
             var current_status = _context.OrderStatuses.Find(status_id);
 
             if (current_status == null)
@@ -54,6 +64,27 @@ namespace Magazine.Controllers
             return Ok(current_status);
 
         }
+
+        [HttpGet("GetOrderTypeByOrderId/{order_id}")]
+        public IActionResult GetOrderTypeByOrderId(int order_id)
+        {
+            var current_order = _context.Orders.Find(order_id);
+            if (current_order == null) { return NotFound(); }
+
+            int status_id = current_order.TypeId.Value;
+
+
+            var current_type = _context.OrderTypes.Find(status_id);
+
+            if (current_type == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(current_type);
+
+        }
+
 
         [HttpPut("UpdateOrderStatus/{orderId}/{newStatusId}")]
         public IActionResult UpdateOrderStatus(int orderId, int newStatusId)
@@ -76,9 +107,7 @@ namespace Magazine.Controllers
             _context.SaveChanges();
 
             return Ok(order);
-
         }
-       
         [HttpGet("GetAllOrders")]
         public List<Order> GetAllOrders()
         {
@@ -95,24 +124,38 @@ namespace Magazine.Controllers
             return Ok(_context.Orders.FirstOrDefault(r => r.Id == id));
         }
         [HttpGet("GetOrdersByFilter/{filter}")]
-        public List<Order> GetOrderByFilter(Expression<Func<Order, bool>> filter)
+        public List<Order> GetOrdersByFilter(Expression<Func<Order, bool>> filter)
         {
             return _context.Orders.Where(filter).ToList();
         }
-        [HttpGet("UpdateOrders/{order}")]
-        public Order UpdateOrder(Order order)
+       
+        [HttpPost("UpdateOrder")]
+        public IActionResult UpdateOrder([FromBody] Order order)
         {
+            if (order == null)
+            {
+                return BadRequest();
+            }
+
+            var order_id = order.Id;
+
+            if (_context.Orders.Find(order_id) == null)
+            {
+                return NotFound();
+            }
+
             _context.Orders.Update(order);
             _context.SaveChanges();
-            return order;
+            return Ok();
         }
-        [HttpDelete("DeleteOrders/{id}")]
+        
+        [HttpDelete("DeleteOrder/{id}")]
         public void DeleteOrder(int id)
         {
-            var cleaningHistory = _context.Orders.FirstOrDefault(r => r.Id == id);
-            if (cleaningHistory != null)
+            var order = _context.Orders.FirstOrDefault(r => r.Id == id);
+            if (order != null)
             {
-                _context.Orders.Remove(cleaningHistory);
+                _context.Orders.Remove(order);
                 _context.SaveChanges();
             }
         }

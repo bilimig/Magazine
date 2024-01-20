@@ -17,38 +17,33 @@ namespace Magazine.Controllers
             _context = context;
 
         }
-        [HttpPost("AddNewProduct")]
-        public IActionResult AddNewProduct(Product product)
-        {
-            if (product == null)
-            {
-                return BadRequest();
-            }
-            _context.Products.Add(product);
-            _context.SaveChanges();
-            return Ok(product);
-        }
 
-        [HttpGet("GetProduct/{product_id}")]
-        public IActionResult GetProduct(int product_id)
+        [HttpGet("GetProductById")]
+        public IActionResult GetProductById(int id)
         {
-            var product = _context.Orders.Find(product_id);
-            if (product == null)
+            if (_context.Products.FirstOrDefault(r => r.Id == id) == null)
             {
                 return NotFound();
             }
 
+            return Ok(_context.Products.FirstOrDefault(r => r.Id == id));
+        }
+
+        [HttpPost("AddProduct")]
+        public IActionResult AddProduct([FromBody] Product product)
+        {
+            if(product == null)
+            {
+                return BadRequest();
+            }
+
+            _context.Products.Add(product);
+            _context.SaveChanges();
+
+
             return Ok(product);
         }
 
-        [HttpDelete("DeleteProduct/{product}")]
-        public Product DeleteProduct(Product product)
-        {
-            _context.Products.Remove(product);
-            _context.SaveChanges();
-
-            return product;
-        }
         [HttpPut("UpdateProductAmount/{product_id}/{amount}")]
         public IActionResult UpdateProductAmount(int  product_id, int amount)
         {
@@ -64,35 +59,35 @@ namespace Magazine.Controllers
 
         }
 
-        [HttpGet("GetAllProduct")]
-        public List<Product> GetAllProduct()
+        [HttpGet("GetAllProducts")]
+        public List<Product> GetAllProducts()
         {
             return _context.Products.ToList();
         }
-        [HttpGet("GetProductById")]
-        public IActionResult GetProductById(int id)
-        {
-            if (_context.Products.FirstOrDefault(r => r.Id == id) == null)
-            {
-                return NotFound();
-            }
 
-            return Ok(_context.Products.FirstOrDefault(r => r.Id == id));
-        }
-
-        [HttpGet("GetProductByFilter/{filter}")]
-        public List<Product> GetProductByFilter(Expression<Func<Product, bool>> filter)
+        [HttpGet("GetProductsByFilter/{filter}")]
+        public List<Product> GetProductsByFilter(Expression<Func<Product, bool>> filter)
         {
             return _context.Products.Where(filter).ToList();
         }
-        [HttpGet("UpdateProduct")]
-        public Product UpdateProduct(Product cleaningHistory)
+
+        [HttpPost("UpdateProduct")]
+        public IActionResult UpdateProduct([FromBody] Product product)
         {
-            _context.Products.Update(cleaningHistory);
+            if (product == null)
+            {
+                return BadRequest();
+            }
+            if (_context.Products.Find(product.Id) == null)
+            {
+                return NotFound();
+            }
+            _context.Products.Update(product);
             _context.SaveChanges();
-            return cleaningHistory;
+            return Ok();
         }
-        [HttpDelete("DeleteProduc/{id}")]
+
+        [HttpDelete("DeleteProduct/{id}")]
         public void DeleteProduct(int id)
         {
             var cleaningHistory = _context.Products.FirstOrDefault(r => r.Id == id);
@@ -102,7 +97,7 @@ namespace Magazine.Controllers
                 _context.SaveChanges();
             }
         }
-        //dokonczyc jak cos brakuje
+       
 
     }
 }
