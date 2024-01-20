@@ -17,6 +17,19 @@ namespace Magazine.Controllers
             _context = context;
 
         }
+
+        [HttpPost ("AddNewOrder")]
+        public IActionResult AddNewOrder ([FromBody]Order order)
+        {
+            if (order == null)
+            {
+                return BadRequest();
+            }
+            _context.Orders.Add (order);
+            _context.SaveChanges();
+            return Ok(order);
+        }
+
         [HttpGet("GetOrder/{order_id}")]
         public IActionResult GetOrder(int order_id)
         {
@@ -63,22 +76,16 @@ namespace Magazine.Controllers
             _context.SaveChanges();
 
             return Ok(order);
-        }
-        [HttpDelete("DeleteOrder/{order}")]
-        public Order DeleteOrder(Order order)
-        {
-            _context.Orders.Remove(order);
-            _context.SaveChanges();
 
-            return order;
         }
-        [HttpGet("GetAllOrderCleaningHistories")]
-        public List<Order> GetAllOrderCleaningHistories()
+       
+        [HttpGet("GetAllOrders")]
+        public List<Order> GetAllOrders()
         {
             return _context.Orders.ToList();
         }
-        [HttpGet("GetOrderCleaningHistoryById")]
-        public IActionResult GetOrderCleaningHistoryById(int id)
+        [HttpGet("GetOrderById")]
+        public IActionResult GetOrderById(int id)
         {
             if(_context.Orders.FirstOrDefault(r => r.Id == id) == null)
             {
@@ -87,20 +94,20 @@ namespace Magazine.Controllers
             
             return Ok(_context.Orders.FirstOrDefault(r => r.Id == id));
         }
-        [HttpGet("GetOrderCleaningHistoriesByFilter/{filter}")]
-        public List<Order> GetOrderCleaningHistoriesByFilter(Expression<Func<Order, bool>> filter)
+        [HttpGet("GetOrdersByFilter/{filter}")]
+        public List<Order> GetOrderByFilter(Expression<Func<Order, bool>> filter)
         {
             return _context.Orders.Where(filter).ToList();
         }
-        [HttpGet("UpdateOrderCleaningHistory/{cleaningHistory}")]
-        public Order UpdateOrderCleaningHistory(Order cleaningHistory)
+        [HttpGet("UpdateOrders/{order}")]
+        public Order UpdateOrder(Order order)
         {
-            _context.Orders.Update(cleaningHistory);
+            _context.Orders.Update(order);
             _context.SaveChanges();
-            return cleaningHistory;
+            return order;
         }
-        [HttpDelete("DeleteOrderCleaningHistory/{id}")]
-        public void DeleteOrderCleaningHistory(int id)
+        [HttpDelete("DeleteOrders/{id}")]
+        public void DeleteOrder(int id)
         {
             var cleaningHistory = _context.Orders.FirstOrDefault(r => r.Id == id);
             if (cleaningHistory != null)
