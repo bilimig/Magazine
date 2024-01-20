@@ -128,14 +128,27 @@ namespace Magazine.Controllers
         {
             return _context.Orders.Where(filter).ToList();
         }
-        [HttpGet("UpdateOrder/{order}")]
-        public Order UpdateOrder(Order order)
+       
+        [HttpPost("UpdateOrder")]
+        public IActionResult UpdateOrder([FromBody] Order order)
         {
+            if (order == null)
+            {
+                return BadRequest();
+            }
+
+            var order_id = order.Id;
+
+            if (_context.Orders.Find(order_id) == null)
+            {
+                return NotFound();
+            }
+
             _context.Orders.Update(order);
             _context.SaveChanges();
-            return order;
-        }//zapytac czy git
-
+            return Ok();
+        }
+        
         [HttpDelete("DeleteOrder/{id}")]
         public void DeleteOrder(int id)
         {

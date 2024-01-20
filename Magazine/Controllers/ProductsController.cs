@@ -78,6 +78,12 @@ namespace Magazine.Controllers
             {
                 return BadRequest();
             }
+            var product_id = product.Id;
+
+            if (_context.Products.Find(product_id) == null)
+            {
+                return NotFound();
+            }
             _context.Products.Update(product);
             _context.SaveChanges();
             return Ok();
