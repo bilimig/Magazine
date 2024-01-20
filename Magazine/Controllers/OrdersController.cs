@@ -8,15 +8,15 @@ namespace Magazine.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class OrderController : ControllerBase
+    public class OrdersController : ControllerBase
     {
         private readonly MagazineContext _context;
-
-        public OrderController(MagazineContext context)
+        public OrdersController(MagazineContext context)
         {
             _context = context;
 
         }
+
         [HttpGet("GetOrder/{order_id}")]
         public IActionResult GetOrder(int order_id)
         {
