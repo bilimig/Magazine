@@ -15,7 +15,6 @@ namespace Magazine.Controllers
             _context = context;
         }
 
-        // GET: api/<ContactDetailsController>
         [HttpPost("AddNewContactDetails")]
         public IActionResult AddNewContactDetails([FromBody]ContactDetail contact_details)
         {
@@ -28,8 +27,8 @@ namespace Magazine.Controllers
             return Ok(contact_details);
         }
 
-        [HttpGet("ContactDetailsById/{client_id}")]
-        public IActionResult UomGetById(int details_id)
+        [HttpGet("GetContactDetailsById/{client_id}")]
+        public IActionResult GetContactDetailsById(int details_id)
         {
             var details = _context.ContactDetails.Find(details_id);
             if (details == null)

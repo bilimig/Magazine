@@ -1,5 +1,6 @@
 ﻿using Magazine.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -43,6 +44,33 @@ namespace Magazine.Controllers
             }
 
             return Ok(order); 
+        }
+
+        [HttpGet("GetAllOrderItemsByOrder/{order_id}")]
+        public IActionResult GetAllOrderItemsByOrder(int order_id)
+        {
+
+            var current_order = _context.OrderItems.Where(o => o.OrderId == order_id).ToList();
+
+            if (current_order == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(current_order);
+        }
+
+        [HttpGet("GetAllOrderandItemsByOrder/{order_id}")]
+        public IActionResult GetAllOrderandItemsByOrder(int order_id)
+        {
+            var current_order = _context.Orders.Include(order => order.OrderItems).Where(o=> o.Id == order_id).ToList();
+
+            if (current_order == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(current_order);
         }
 
         [HttpGet("GetOrderStatusByOrderId/{order_id}")]
@@ -108,11 +136,13 @@ namespace Magazine.Controllers
 
             return Ok(order);
         }
+
         [HttpGet("GetAllOrders")]
         public List<Order> GetAllOrders()
         {
             return _context.Orders.ToList();
         }
+
         [HttpGet("GetOrderById")]
         public IActionResult GetOrderById(int id)
         {

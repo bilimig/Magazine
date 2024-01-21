@@ -1,5 +1,6 @@
 ﻿using Magazine.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -40,6 +41,11 @@ namespace Magazine.Controllers
 
             return Ok(client);
         }
+        [HttpGet("GetAllClients")]
+        public IActionResult GetAllClients()
+        {
+            return Ok(_context.Clients.ToList());
+        }
 
         [HttpDelete("DeleteClient/{id}")]
         public void DeleteClient(int id)
@@ -55,6 +61,34 @@ namespace Magazine.Controllers
         public List<Client> GetClientsByFilter(Expression<Func<Client, bool>> filter)
         {
             return _context.Clients.Where(filter).ToList();
+        }
+
+        [HttpGet("GetClientWithInformation/{client_id}")]
+        public IActionResult GetClientWithInformation(int client_id)
+        {
+            var clientDetails = _context.Clients
+         .Where(client => client.Id == client_id)
+         .Select(client => new
+         {
+             client.Id,
+             client.DetailsId,
+             ContactDetails = client.Details != null ? new
+             {
+                 client.Details.Id,
+                 client.Details.Name,
+                 client.Details.SecondName,
+                 client.Details.Phone,
+                 client.Details.Address
+             } : null,
+         })
+         .ToList();
+
+            if (clientDetails == null || !clientDetails.Any())
+            {
+                return NotFound();
+            }
+
+            return Ok(clientDetails); ;
         }
 
     }
