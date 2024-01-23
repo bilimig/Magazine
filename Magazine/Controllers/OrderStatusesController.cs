@@ -25,14 +25,42 @@ namespace Magazine.Controllers
             }
             return Ok(orderStatus);
         }
-        [HttpPost("AddOrderType")]
-        public IActionResult AddOrderStatus([FromBody] OrderStatus orderStatus)
+        [HttpPost("AddNewOrderStatus")]
+        public IActionResult AddNewClient([FromBody] OrderStatusInput orderstatusinput)
         {
-            if (orderStatus == null) { return BadRequest(); }
+            if (ModelState.IsValid)
+            {
 
-            _context.OrderStatuses.Add(orderStatus);
-            _context.SaveChanges();
-            return Ok(orderStatus);
+                var orderstatus= new OrderStatus
+                {
+                    Id = orderstatusinput.Id,
+                    Status = orderstatusinput.Status,
+
+                };
+
+
+                if (orderstatus.Id <= 0)
+                {
+                    return BadRequest();
+                }
+
+                if (orderstatus.Status == null)
+                {
+                    return BadRequest();
+                }
+                if (_context.OrderStatuses.Find(orderstatus.Id) == null)
+                {
+                    return BadRequest();
+                }
+                _context.OrderStatuses.Add(orderstatus);
+                _context.SaveChangesAsync();
+
+                return Ok(new { Message = "Order Status added successfully.", OrderStatusId = orderstatus.Id });
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
         }
         [HttpDelete("DeleteOrderType{id}")]
         public void DeleteOrderStatus(int id)

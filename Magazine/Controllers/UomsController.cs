@@ -36,17 +36,37 @@ namespace Magazine.Controllers
                 _context.SaveChanges();
             }
         }
-        [HttpPost("UomAdd")]
-        public IActionResult UomAdd([FromBody]Uom uom)
+        [HttpPost("AddNewUOM")]
+        public IActionResult AddNewUOM([FromBody] UomInput uominput)
         {
-            if (uom == null)
+            if (ModelState.IsValid)
             {
-                return BadRequest();
-            }
 
-            _context.Uoms.Add(uom);
-            _context.SaveChanges();
-            return Ok(uom);
+                var uom = new Uom
+                {
+                    Id = uominput.Id,
+                    Name = uominput.Name,
+
+                };
+                if (uom.Id <= 0 || uom.Name == null)
+                {
+                    return BadRequest();
+                }
+
+
+                if (_context.Uoms.Find(uom.Id) != null)
+                {
+                    return BadRequest();
+                }
+                _context.Uoms.Add(uom);
+                _context.SaveChangesAsync();
+
+                return Ok(new { Message = "UOM added successfully.", UomId = uom.Id });
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
         }
 
 

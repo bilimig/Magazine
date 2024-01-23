@@ -16,18 +16,46 @@ namespace Magazine.Controllers
         }
 
         [HttpPost("AddNewContactDetails")]
-        public IActionResult AddNewContactDetails([FromBody]ContactDetail contact_details)
+        public IActionResult AddNewClient([FromBody] ContactDetailInput detailinput)
         {
-            if (contact_details == null)
+            if (ModelState.IsValid)
             {
-                return BadRequest();
-            }
-            _context.ContactDetails.Add(contact_details);
-            _context.SaveChanges();
-            return Ok(contact_details);
-        }
 
-        [HttpGet("GetContactDetailsById/{client_id}")]
+                var detail = new ContactDetail
+                {
+
+                    Id = detailinput.Id,
+                    Name = detailinput.Name,
+                    SecondName = detailinput.SecondName,
+                    Phone = detailinput.Phone,
+                    Address = detailinput.Address,
+                };
+                if (detail.Id <= 0)
+                {
+                    return BadRequest();
+                }
+
+
+                if (_context.ContactDetails.Find(detail.Id) != null)
+                {
+                    return BadRequest();
+                }
+                if(detail.Name == null || detail.SecondName == null || detail.Phone == null || detail.Address == null)
+                {
+                    return BadRequest();
+                }
+                
+                _context.ContactDetails.Add(detail);
+                _context.SaveChangesAsync();
+
+                return Ok(new { Message = "Details added successfully.", DetailId = detail.Id });
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
+        }
+        [HttpGet("GetContactDetailsById/{details_id}")]
         public IActionResult GetContactDetailsById(int details_id)
         {
             var details = _context.ContactDetails.Find(details_id);
@@ -68,6 +96,22 @@ namespace Magazine.Controllers
                 _context.SaveChanges();
             }
         }
+
+        //[HttpPost("UpdateContactDetails")]
+        //public IActionResult UpdateContactDetails([FromBody] ContactDetail contactDetail)
+        //{
+        //    if (contactDetail == null)
+        //    {
+        //        return BadRequest();
+        //    }
+        //    if (_context.Products.Find(contactDetail.Id) == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    _context.Products.Update(product);
+        //    _context.SaveChanges();
+        //    return Ok();
+        //}
 
 
 

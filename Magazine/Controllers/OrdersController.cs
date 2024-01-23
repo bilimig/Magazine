@@ -1,7 +1,9 @@
 ﻿using Magazine.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq.Expressions;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -33,32 +35,7 @@ namespace Magazine.Controllers
             return Ok(order);
         }
 
-        [HttpGet("GetOrder/{order_id}")]
-        public IActionResult GetOrder(int order_id)
-        {
-            var order = _context.Orders.Find(order_id);
-            
-            if(order == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(order); 
-        }
-
-        [HttpGet("GetAllOrderItemsByOrder/{order_id}")]
-        public IActionResult GetAllOrderItemsByOrder(int order_id)
-        {
-
-            var current_order = _context.OrderItems.Where(o => o.OrderId == order_id).ToList();
-
-            if (current_order == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(current_order);
-        }
+        
 
         [HttpGet("GetAllOrderandItemsByOrder/{order_id}")]
         public IActionResult GetAllOrderandItemsByOrder(int order_id)
@@ -138,9 +115,10 @@ namespace Magazine.Controllers
         }
 
         [HttpGet("GetAllOrders")]
-        public List<Order> GetAllOrders()
-        {
-            return _context.Orders.ToList();
+        public IActionResult GetAllOrders()
+
+        {          
+            return Ok(_context.Orders.ToList());
         }
 
         [HttpGet("GetOrderById")]
@@ -153,32 +131,74 @@ namespace Magazine.Controllers
             
             return Ok(_context.Orders.FirstOrDefault(r => r.Id == id));
         }
-        [HttpGet("GetOrdersByFilter/{filter}")]
-        public List<Order> GetOrdersByFilter(Expression<Func<Order, bool>> filter)
+
+        [HttpGet("GetOrderedOrdersByDate")]
+        public IActionResult GetOrderedOrdersByDate()
         {
-            return _context.Orders.Where(filter).ToList();
-        }
-       
-        [HttpPost("UpdateOrder")]
-        public IActionResult UpdateOrder([FromBody] Order order)
-        {
-            if (order == null)
+
+            List<Order> orders = _context.Orders
+                .ToList();
+            if (orders == null)
             {
                 return BadRequest();
             }
-
-            var order_id = order.Id;
-
-            if (_context.Orders.Find(order_id) == null)
-            {
-                return NotFound();
-            }
-
-            _context.Orders.Update(order);
-            _context.SaveChanges();
-            return Ok();
+            var sortedOrders = orders.OrderBy(order => order.Date).ToList();
+            return Ok(sortedOrders);
         }
-        
+
+
+        [HttpPost("AddNewOrder")]
+        public IActionResult AddNewOrder([FromBody] OrderInput orderinput)
+        {
+            if (ModelState.IsValid)
+            {
+
+                var order = new Order
+                {
+                    //Id = orderinput.Id,
+                    UserId = orderinput.UserId,
+                    ClientId = orderinput.ClientId,
+                    Date = orderinput.Date,
+                    StatusId = orderinput.StatusId,
+                    TotalValue = orderinput.TotalValue,
+                    TypeId = orderinput.TypeId,
+
+
+                };
+                if (order.UserId <= 0 || order.ClientId <= 0 || order.StatusId <= 0 || order.TypeId <= 0 || order.TotalValue < 0 || order.Date == null)
+                {
+                    return BadRequest();
+                }
+
+
+                if (_context.Clients.Find(order.ClientId) == null)
+                {
+                    return BadRequest();
+                }
+                if (_context.Users.Find(order.UserId) == null)
+                {
+                    return BadRequest();
+                }
+                if (_context.OrderStatuses.Find(order.StatusId) == null)
+                {
+                    return BadRequest();
+                }
+                if (_context.OrderTypes.Find(order.TypeId) == null)
+                {
+                    return BadRequest();
+                }
+
+                _context.Orders.Add(order);
+                _context.SaveChanges();
+
+                return Ok(new { Message = "Order added successfully.", OrderId = order.Id });
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
+        }
+
         [HttpDelete("DeleteOrder/{id}")]
         public void DeleteOrder(int id)
         {
@@ -188,6 +208,63 @@ namespace Magazine.Controllers
                 _context.Orders.Remove(order);
                 _context.SaveChanges();
             }
+        }
+
+        [HttpPost("UpdateOrder/{order_id}")]
+        public IActionResult UpdateClient([FromBody] OrderInput orderinput, int order_id)
+        { 
+            if (_context.Orders.Find(order_id) == null) { return NotFound(); }
+
+            if (ModelState.IsValid)
+            {
+                var order = _context.Orders.Find(order_id);
+                {
+                    //order.Id = orderinput.Id;
+                    order.UserId = orderinput.UserId;
+                    order.ClientId = orderinput.ClientId;
+                    order.Date = orderinput.Date;
+                    order.StatusId = orderinput.StatusId;
+                    order.TotalValue = orderinput.TotalValue;
+                    order.TypeId = orderinput.TypeId;
+
+
+                };
+                if (order.UserId <= 0 || order.ClientId <= 0 || order.StatusId <= 0 || order.TypeId <= 0 || order.TotalValue < 0 || order.Date == null)
+                {
+                    return BadRequest();
+                }
+
+
+                
+
+                if (_context.Clients.Find(order.ClientId) == null)
+                {
+                    return BadRequest();
+                }
+                if (_context.Users.Find(order.UserId) == null)
+                {
+                    return BadRequest();
+                }
+                if (_context.OrderStatuses.Find(order.StatusId) == null)
+                {
+                    return BadRequest();
+                }
+                if (_context.OrderTypes.Find(order.TypeId) == null)
+                {
+                    return BadRequest();
+                }
+
+                _context.Orders.Add(order);
+                _context.SaveChangesAsync();
+
+                return Ok(new { Message = "Client added successfully.", OrderId = order.Id });
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
+
+
         }
 
 

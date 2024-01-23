@@ -65,26 +65,59 @@ namespace Magazine.Controllers
             return _context.Products.ToList();
         }
 
-        [HttpGet("GetProductsByFilter/{filter}")]
-        public List<Product> GetProductsByFilter(Expression<Func<Product, bool>> filter)
+        [HttpGet("GetOrderedProductsByAmount")]
+        public IActionResult GetOrderedProductsByAmount()
         {
-            return _context.Products.Where(filter).ToList();
-        }
 
-        [HttpPost("UpdateProduct")]
-        public IActionResult UpdateProduct([FromBody] Product product)
-        {
-            if (product == null)
+            List<Product> products = _context.Products
+                .ToList();
+            if (products == null)
             {
                 return BadRequest();
             }
-            if (_context.Products.Find(product.Id) == null)
+            var sortedProducts = products.OrderBy(product => product.Amount).ToList();
+            return Ok(sortedProducts);
+        }
+        [HttpPost("AddNewProduct")]
+        public IActionResult AddNewProduct([FromBody] ProductInput productinput)
+        {
+            if (ModelState.IsValid)
             {
-                return NotFound();
+
+                var product = new Product
+                {
+                    Id = productinput.Id,
+                    Name = productinput.Name,
+                    UomId = productinput.UomId,
+                    BaseUnit = productinput.BaseUnit,
+                    Amount = productinput.Amount,
+
+                };
+                if (product.Id <= 0 || product.Amount <  0 || product.UomId <= 0 || product.BaseUnit == null || product.Name == null)
+                {
+                    return BadRequest();
+                }
+
+
+                if (_context.Products.Find(product.Id) != null)
+                {
+                    return BadRequest();
+                }
+
+                if (_context.ContactDetails.Find(product.UomId) == null)
+                {
+                    return BadRequest();
+                }
+
+                _context.Products.Add(product);
+                _context.SaveChangesAsync();
+
+                return Ok(new { Message = "Product added successfully.", Product = product.Id });
             }
-            _context.Products.Update(product);
-            _context.SaveChanges();
-            return Ok();
+            else
+            {
+                return BadRequest(ModelState);
+            }
         }
 
         [HttpDelete("DeleteProduct/{id}")]

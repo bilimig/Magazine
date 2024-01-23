@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace Magazine.Models
 {
-    public partial class Magazine
+    public partial class ClientInput
     {
-
-        public Magazine() { }
+       
 
         public int Id { get; set; }
-        public string? Name { get; set; }
+        public int? DetailsId { get; set; }
+
     }
 }

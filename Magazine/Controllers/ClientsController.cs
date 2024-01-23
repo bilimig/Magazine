@@ -19,15 +19,41 @@ namespace Magazine.Controllers
 
         // GET: api/<ContactDetailsController>
         [HttpPost("AddNewClient")]
-        public IActionResult AddNewClient([FromBody] Client client)
+        public IActionResult AddNewClient([FromBody] ClientInput clientinput)
         {
-            if (client == null)
+            if (ModelState.IsValid)
             {
-                return BadRequest();
+                
+                var client = new Client
+                {
+                    Id = clientinput.Id,
+                    DetailsId = clientinput.DetailsId,
+
+                };
+                if(client.Id <= 0 || client.DetailsId <= 0) 
+                {
+                    return BadRequest();
+                }
+
+
+                if (_context.Clients.Find(client.Id) != null)
+                {
+                    return BadRequest();
+                }
+
+                if (_context.ContactDetails.Find(client.DetailsId) == null)
+                {
+                    return BadRequest();
+                }
+                _context.Clients.Add(client);
+                _context.SaveChangesAsync();
+
+                return Ok(new { Message = "Client added successfully.", ClientId = client.Id });
             }
-            _context.Clients.Add(client);
-            _context.SaveChanges();
-            return Ok(client);
+            else
+            {
+                return BadRequest(ModelState);
+            }
         }
 
         [HttpGet("GetClientById/{client_id}")]
@@ -57,10 +83,19 @@ namespace Magazine.Controllers
                 _context.SaveChanges();
             }
         }
-        [HttpGet("GetClientsByFilter/{filter}")]
-        public List<Client> GetClientsByFilter(Expression<Func<Client, bool>> filter)
+        [HttpGet("GetOrderedClients")]
+        public IActionResult GetOrderedClients()
         {
-            return _context.Clients.Where(filter).ToList();
+
+            List<Client> clients = _context.Clients
+                .Include(client => client.Details)
+                .ToList();
+            if (clients == null)
+            {
+                return BadRequest();
+            }
+            var sortedClients = clients.OrderBy(client => client.Details?.Name, StringComparer.OrdinalIgnoreCase).ToList();
+            return Ok(sortedClients);
         }
 
         [HttpGet("GetClientWithInformation/{client_id}")]
@@ -89,6 +124,50 @@ namespace Magazine.Controllers
             }
 
             return Ok(clientDetails); ;
+        }
+
+        [HttpPost("UpdateClientContactDetails/{client_id}")]
+        public IActionResult UpdateClient([FromBody] ContactDetailInput detailinput,int client_id)
+        {
+            var client = _context.Clients.Find(client_id);
+            if (_context.Clients.Find(client_id) == null){ return NotFound(); }
+
+            if (ModelState.IsValid)
+            {
+                var detail = _context.ContactDetails.Find(client.DetailsId);
+                {
+                    detail.Id = detailinput.Id;
+                    detail.Name = detailinput.Name;
+                    detail.SecondName = detailinput.SecondName;
+                    detail.Phone = detailinput.Phone;
+                    detail.Address = detailinput.Address;
+                };
+                if (detail.Id <= 0)
+                {
+                    return BadRequest();
+                }
+
+
+                if (_context.ContactDetails.Find(detail.Id) != null)
+                {
+                    return BadRequest();
+                }
+                if (detail.Name == null || detail.SecondName == null || detail.Phone == null || detail.Address == null)
+                {
+                    return BadRequest();
+                }
+
+                _context.ContactDetails.Update(detail);
+                _context.SaveChangesAsync();
+
+                return Ok(new { Message = "Details added successfully.", DetailId = detail.Id });
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
+
+
         }
 
     }

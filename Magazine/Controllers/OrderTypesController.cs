@@ -25,15 +25,44 @@ namespace Magazine.Controllers
             }
             return Ok(order_type);
         }
-        [HttpPost("AddOrderType")]
-        public IActionResult AddOrderType([FromBody]OrderType orderType)
+        [HttpPost("AddNewOrderType")]
+        public IActionResult AddNewOrderType([FromBody] OrderTypeInput ordertypeinput)
         {
-            if (orderType == null) { return BadRequest(); }
+            if (ModelState.IsValid)
+            {
 
-            _context.OrderTypes.Add(orderType);
-            _context.SaveChanges();
-            return Ok(orderType);
+                var ordertype = new OrderType
+                {
+                    Id = ordertypeinput.Id,
+                    Type = ordertypeinput.Type,
+
+                };
+                if (ordertype.Id <= 0 || ordertype.Type == null)
+                {
+                    return BadRequest();
+                }
+
+
+                if (_context.OrderTypes.Find(ordertype.Id) != null)
+                {
+                    return BadRequest();
+                }
+
+                _context.OrderTypes.Add(ordertype);
+                _context.SaveChangesAsync();
+
+                return Ok(new { Message = "Client added successfully.", OrderTypeId = ordertype.Id });
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
         }
+
+
+
+
+
         [HttpDelete("DeleteOrderType{id}")]
         public void DeleteOrderTyper(int id)
         {

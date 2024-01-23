@@ -22,14 +22,44 @@ namespace Magazine.Controllers
             }
             return Ok(user);
         }
-        [HttpPost("AddUser")]
-        public IActionResult AddUser([FromBody]User user)
+        [HttpPost("AddNewUser")]
+        public IActionResult AddNewClient([FromBody] UserInput userinput)
         {
-            if (user == null) { return BadRequest(); }
+            if (ModelState.IsValid)
+            {
 
-            _context.Users.Add(user);
-            _context.SaveChanges();
-            return Ok(user);
+                var user = new User
+                {
+                    Id = userinput.Id,
+                    DetailsId = userinput.DetailsId,
+                    Password = userinput.Password,
+                    IsAdmin = userinput.IsAdmin,
+
+                };
+                if (user.Id <= 0 || user.DetailsId <= 0 || user.Password == null || user.IsAdmin ==null)
+                {
+                    return BadRequest();
+                }
+
+
+                if (_context.Users.Find(user.Id) != null)
+                {
+                    return BadRequest();
+                }
+
+                if (_context.ContactDetails.Find(user.DetailsId) == null)
+                {
+                    return BadRequest();
+                }
+                _context.Users.Add(user);
+                _context.SaveChangesAsync();
+
+                return Ok(new { Message = "Client added successfully.", UserId = user.Id });
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
         }
         [HttpDelete("DeleteUser{user_id}")]
         public void DeleteUser(int user_id)

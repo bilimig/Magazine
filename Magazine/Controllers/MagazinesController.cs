@@ -26,15 +26,7 @@ namespace Magazine.Controllers
             }
             return Ok(magazine);
         }
-        [HttpPost("AddMagazine")]
-        public IActionResult AddMagazine([FromBody]Magazine.Models.Magazine magazine)
-        {
-            if (magazine == null) { return BadRequest(); }
-
-            _context.Magazines.Add(magazine);
-            _context.SaveChanges();
-            return Ok(magazine);
-        }
+       
         [HttpDelete("DeleteMagazine{id}")]
         public void DeleteMagazine(int id)
         {

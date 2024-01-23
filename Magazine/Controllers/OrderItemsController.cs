@@ -18,19 +18,51 @@ namespace Magazine.Controllers
         }
 
 
-        [HttpPost("AddOrderItem")]
-        public IActionResult AddOrderItem([FromBody]OrderItem item) 
+        [HttpPost("AddNewOrderItem")]
+        public IActionResult AddNewOrderItem([FromBody] OrderItemInput orderiteminput)
         {
-            if (item == null)
+            if (ModelState.IsValid)
             {
-                return BadRequest();
+                var orderitem = new OrderItem
+                {
+                    Id = orderiteminput.Id,
+                   ProductId = orderiteminput.ProductId,
+                   Amount = orderiteminput.Amount,
+                   OrderId = orderiteminput.OrderId,
+                   Price= orderiteminput.Price,
+
+                };
+
+                if (orderitem.Id <= 0 || orderitem.ProductId <= 0 || orderitem.Amount < 0 || orderitem.Price < 0 || orderitem.OrderId < 0)
+                {
+                    return BadRequest();
+                }
+
+
+                if (_context.OrderItems.Find(orderitem.Id) != null)
+                {
+                    return BadRequest();
+                }
+
+                if (_context.Products.Find(orderitem.ProductId) == null)
+                {
+                    return BadRequest();
+                }
+                if (_context.Orders.Find(orderitem.OrderId) == null)
+                {
+                    return BadRequest();
+                }
+
+
+                _context.OrderItems.Add(orderitem);
+                _context.SaveChangesAsync();
+
+                return Ok(new { Message = "Order Item added successfully.", ClientId = orderitem.Id });
             }
-
-            _context.OrderItems.Add(item);
-            _context.SaveChanges();
-
-
-            return Ok(item);
+            else
+            {
+                return BadRequest(ModelState);
+            }
         }
 
 
