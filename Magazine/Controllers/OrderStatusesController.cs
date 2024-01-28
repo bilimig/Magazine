@@ -33,21 +33,13 @@ namespace Magazine.Controllers
 
                 var orderstatus= new OrderStatus
                 {
-                    Id = orderstatusinput.Id,
+                   
                     Status = orderstatusinput.Status,
 
                 };
 
 
-                if (orderstatus.Id <= 0)
-                {
-                    return BadRequest();
-                }
-
-                if (orderstatus.Status == null)
-                {
-                    return BadRequest();
-                }
+              
                 if (_context.OrderStatuses.Find(orderstatus.Id) == null)
                 {
                     return BadRequest();
