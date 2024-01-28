@@ -26,20 +26,17 @@ namespace Magazine.Controllers
                 
                 var client = new Client
                 {
-                    Id = clientinput.Id,
+                    
                     DetailsId = clientinput.DetailsId,
 
                 };
-                if(client.Id <= 0 || client.DetailsId <= 0) 
+                if( client.DetailsId <= 0) 
                 {
                     return BadRequest();
                 }
 
 
-                if (_context.Clients.Find(client.Id) != null)
-                {
-                    return BadRequest();
-                }
+        
 
                 if (_context.ContactDetails.Find(client.DetailsId) == null)
                 {
@@ -136,22 +133,15 @@ namespace Magazine.Controllers
             {
                 var detail = _context.ContactDetails.Find(client.DetailsId);
                 {
-                    detail.Id = detailinput.Id;
                     detail.Name = detailinput.Name;
                     detail.SecondName = detailinput.SecondName;
                     detail.Phone = detailinput.Phone;
                     detail.Address = detailinput.Address;
                 };
-                if (detail.Id <= 0)
-                {
-                    return BadRequest();
-                }
+             
 
 
-                if (_context.ContactDetails.Find(detail.Id) != null)
-                {
-                    return BadRequest();
-                }
+           
                 if (detail.Name == null || detail.SecondName == null || detail.Phone == null || detail.Address == null)
                 {
                     return BadRequest();

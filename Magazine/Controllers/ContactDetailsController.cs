@@ -24,22 +24,13 @@ namespace Magazine.Controllers
                 var detail = new ContactDetail
                 {
 
-                    Id = detailinput.Id,
+
                     Name = detailinput.Name,
                     SecondName = detailinput.SecondName,
                     Phone = detailinput.Phone,
                     Address = detailinput.Address,
                 };
-                if (detail.Id <= 0)
-                {
-                    return BadRequest();
-                }
-
-
-                if (_context.ContactDetails.Find(detail.Id) != null)
-                {
-                    return BadRequest();
-                }
+            
                 if(detail.Name == null || detail.SecondName == null || detail.Phone == null || detail.Address == null)
                 {
                     return BadRequest();

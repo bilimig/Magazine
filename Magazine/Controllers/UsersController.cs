@@ -30,22 +30,17 @@ namespace Magazine.Controllers
 
                 var user = new User
                 {
-                    Id = userinput.Id,
+                   
                     DetailsId = userinput.DetailsId,
                     Password = userinput.Password,
                     IsAdmin = userinput.IsAdmin,
 
                 };
-                if (user.Id <= 0 || user.DetailsId <= 0 || user.Password == null || user.IsAdmin ==null)
+                if (user.DetailsId <= 0 || user.Password == null || user.IsAdmin ==null)
                 {
                     return BadRequest();
                 }
 
-
-                if (_context.Users.Find(user.Id) != null)
-                {
-                    return BadRequest();
-                }
 
                 if (_context.ContactDetails.Find(user.DetailsId) == null)
                 {

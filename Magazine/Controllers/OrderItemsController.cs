@@ -25,7 +25,7 @@ namespace Magazine.Controllers
             {
                 var orderitem = new OrderItem
                 {
-                    Id = orderiteminput.Id,
+
                    ProductId = orderiteminput.ProductId,
                    Amount = orderiteminput.Amount,
                    OrderId = orderiteminput.OrderId,
@@ -33,16 +33,11 @@ namespace Magazine.Controllers
 
                 };
 
-                if (orderitem.Id <= 0 || orderitem.ProductId <= 0 || orderitem.Amount < 0 || orderitem.Price < 0 || orderitem.OrderId < 0)
+                if (orderitem.ProductId <= 0 || orderitem.Amount < 0 || orderitem.Price < 0 || orderitem.OrderId < 0)
                 {
                     return BadRequest();
                 }
 
-
-                if (_context.OrderItems.Find(orderitem.Id) != null)
-                {
-                    return BadRequest();
-                }
 
                 if (_context.Products.Find(orderitem.ProductId) == null)
                 {

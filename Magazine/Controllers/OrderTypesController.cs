@@ -33,20 +33,11 @@ namespace Magazine.Controllers
 
                 var ordertype = new OrderType
                 {
-                    Id = ordertypeinput.Id,
+                 
                     Type = ordertypeinput.Type,
 
                 };
-                if (ordertype.Id <= 0 || ordertype.Type == null)
-                {
-                    return BadRequest();
-                }
-
-
-                if (_context.OrderTypes.Find(ordertype.Id) != null)
-                {
-                    return BadRequest();
-                }
+            
 
                 _context.OrderTypes.Add(ordertype);
                 _context.SaveChangesAsync();
