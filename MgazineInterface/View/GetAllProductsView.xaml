@@ -9,14 +9,14 @@
     <Grid>
         <Grid Background="White" Grid.Row="1" Margin="24,40,25,15">
 
-            <Button Height="30" Content="Add User" Width="100" VerticalContentAlignment="Center" Padding="5"  Margin="25" VerticalAlignment="Top" HorizontalAlignment="Right" BorderThickness="1" BorderBrush="#E0E0E0"/>
+            <Button Height="30" Content="Delete selected" Width="100" VerticalContentAlignment="Center" Padding="5"  Margin="25" VerticalAlignment="Top" HorizontalAlignment="Right" BorderThickness="1" BorderBrush="#E0E0E0" Click="Button_Click"/>
             <ListView Name="UserList" BorderBrush="#cdcdcd" Margin="25,70,25,25" Padding="0">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Name"  Width="100" DisplayMemberBinding="{Binding Name}"/>
-                        <GridViewColumn Header="UomID" Width="100" DisplayMemberBinding="{Binding SecondName}"/>
-                        <GridViewColumn Header="BaseUnit" Width="100" DisplayMemberBinding="{Binding Telephone}"/>
-                        <GridViewColumn Header="Amount" Width="100" DisplayMemberBinding="{Binding Address}"/>
+                        <GridViewColumn Header="UomID" Width="100" DisplayMemberBinding="{Binding UomID}"/>
+                        <GridViewColumn Header="BaseUnit" Width="100" DisplayMemberBinding="{Binding BaseUnit}"/>
+                        <GridViewColumn Header="Amount" Width="100" DisplayMemberBinding="{Binding Amount}"/>
                     </GridView>
                 </ListView.View>
             </ListView>

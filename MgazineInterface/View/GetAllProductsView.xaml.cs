@@ -69,5 +69,44 @@ namespace MgazineInterface.View
                 MessageBox.Show($"An error occurred: {ex.Message}");
             }
         }
+
+        private async void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (UserList.SelectedItem != null)
+            {
+                try
+                {
+                    ProductHelper selectedProduct = (ProductHelper)UserList.SelectedItem;
+
+                    using (HttpClient client = new HttpClient())
+                    {
+                        HttpResponseMessage response = await client.DeleteAsync($"https://localhost:7148/api/Products/DeleteProduct/{selectedProduct.Id}");
+
+                        if (response.IsSuccessStatusCode)
+                        {
+                            MessageBox.Show("Product removed successfully.");
+                            
+                            await LoadProductsAsync();
+                            products.Remove(selectedProduct);
+
+                            UserList.Items.Refresh();
+                        }
+                        else
+                        {
+                            MessageBox.Show($"Error: {response.ReasonPhrase}");
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"An error occurred: {ex.Message}");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select a product to remove.");
+            }
+
+        }
     }
 }
