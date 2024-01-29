@@ -16,7 +16,7 @@ namespace Magazine.Controllers
         }
 
         [HttpPost("AddNewContactDetails")]
-        public IActionResult AddNewClient([FromBody] ContactDetailInput detailinput)
+        public IActionResult AddNewContactDetails([FromBody] ContactDetailInput detailinput)
         {
             if (ModelState.IsValid)
             {
@@ -37,7 +37,7 @@ namespace Magazine.Controllers
                 }
                 
                 _context.ContactDetails.Add(detail);
-                _context.SaveChangesAsync();
+                _context.SaveChanges();
 
                 return Ok(new { Message = "Details added successfully.", DetailId = detail.Id });
             }

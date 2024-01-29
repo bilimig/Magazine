@@ -31,15 +31,15 @@ namespace MgazineInterface.View
             InitializeComponent();
         }
 
-        private void Dodaj_Click(object sender, RoutedEventArgs e)
+        private async void Dodaj_Click(object sender, RoutedEventArgs e)
         {
             ContactDetailsJSON contactDetails = new ContactDetailsJSON();
 
             // Tutaj dodaj logikę obsługującą dodawanie danych
             contactDetails.Name= textBoxDane1.Text;
             contactDetails.SecondName = textBoxDane2.Text;
-            contactDetails.Address = textBoxDane3.Text;
-            contactDetails.Phone = textBoxDane4.Text;
+            contactDetails.Phone = textBoxDane3.Text;
+            contactDetails.Address = textBoxDane4.Text;
 
 
             string jsonContent = JsonConvert.SerializeObject(contactDetails);
@@ -53,9 +53,18 @@ namespace MgazineInterface.View
                 StringContent content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
                 // Wysyłanie żądania POST na odpowiedni endpoint (załóżmy, że endpoint to "/api/Clients/AddClient")
-                var response =  client.PostAsync("https://localhost:7148/api/Clients/AddClient", content);
+                using (var response = await client.PostAsync("https://localhost:7148/api/ContactDetails/AddNewContactDetails", content))
+                {
+                    if (response.IsSuccessStatusCode)
+                    {
+                        // Obsługa sukcesu
+                    }
+                    else
+                    {
+                        // Obsługa błędu
+                    }
+                }
 
-                
             }
 
             // Możesz tutaj użyć wprowadzonych danych według potrzeb
