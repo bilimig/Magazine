@@ -45,9 +45,9 @@ namespace Magazine.Controllers
         }
 
         [HttpGet("GetAllProducts")]
-        public List<Product> GetAllProducts()
+        public IActionResult GetAllProducts()
         {
-            return _context.Products.ToList();
+            return Ok(_context.Products.ToList());
         }
 
         [HttpGet("GetOrderedProductsByAmount")]

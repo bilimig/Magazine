@@ -17,7 +17,6 @@
                         <GridViewColumn Header="UomID" Width="100" DisplayMemberBinding="{Binding SecondName}"/>
                         <GridViewColumn Header="BaseUnit" Width="100" DisplayMemberBinding="{Binding Telephone}"/>
                         <GridViewColumn Header="Amount" Width="100" DisplayMemberBinding="{Binding Address}"/>
-
                     </GridView>
                 </ListView.View>
             </ListView>

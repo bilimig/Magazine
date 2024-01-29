@@ -28,7 +28,7 @@ namespace MgazineInterface.View
         public AddProductView()
         {
             InitializeComponent();
-            LoadUomsAsync();
+           //LoadUomsAsync();
         }
         private async void LoadUomsAsync()
         {
