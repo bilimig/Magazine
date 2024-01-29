@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace MgazineInterface.View
 {
     /// <summary>
-    /// Logika interakcji dla klasy ContactDetails.xaml
+    /// Logika interakcji dla klasy GetAllOrdersView.xaml
     /// </summary>
-    public partial class ContactDetails : UserControl
+    public partial class GetAllOrdersView : UserControl
     {
-        public ContactDetails()
+        public GetAllOrdersView()
         {
             InitializeComponent();
         }

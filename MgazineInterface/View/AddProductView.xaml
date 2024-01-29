@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="MgazineInterface.View.AddClientView"
+﻿<UserControl x:Class="MgazineInterface.View.AddProductView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,8 +6,6 @@
              xmlns:local="clr-namespace:MgazineInterface.View"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    
-    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -37,7 +35,6 @@
         <TextBox x:Name="textBoxDane4" Grid.Row="7" Margin="10" Height="25"/>
 
         <Button Content="Dodaj" Grid.Row="8" Margin="10" Click="Dodaj_Click"/>
-    
-    </Grid>
 
-    </UserControl>
+    </Grid>
+</UserControl>
