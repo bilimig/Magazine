@@ -17,6 +17,8 @@ using System.Windows.Shapes;
 using MgazineInterface.Models;
 using System.Net.Http.Json;
 using Newtonsoft.Json;
+using System.Runtime.CompilerServices;
+using System.Windows.Automation.Peers;
 
 namespace MgazineInterface.View
 {
@@ -33,8 +35,16 @@ namespace MgazineInterface.View
             products = new List<ProductHelper>();
             UserList.ItemsSource = products;
 
-            // Call the method to retrieve and display products
-            LoadProductsAsync();
+
+            LoadProducts();
+
+        }
+
+        private async Task LoadProducts()
+        {
+            await LoadProductsAsync();
+            UserList.Items.Refresh();
+
         }
 
         private async Task LoadProductsAsync()
@@ -47,11 +57,11 @@ namespace MgazineInterface.View
 
                     if (response.IsSuccessStatusCode)
                     {
-                        // Deserialize the response content to a collection of Product objects using Newtonsoft.Json
+                        
                         string jsonResponse = await response.Content.ReadAsStringAsync();
                         var productList = JsonConvert.DeserializeObject<List<ProductHelper>>(jsonResponse);
 
-                        // Clear the existing collection and add the new products
+                       
                         products.Clear();
                         foreach (var product in productList)
                         {
@@ -107,6 +117,21 @@ namespace MgazineInterface.View
                 MessageBox.Show("Please select a product to remove.");
             }
 
+        }
+
+        private void SwitchView(object sender, RoutedEventArgs e)
+        {
+              
+
+            AddProductWindow anotherWindow = new AddProductWindow();
+
+            
+            anotherWindow.Show();
+        }
+
+        private void Refresh(object sender, RoutedEventArgs e)
+        {
+            LoadProducts();
         }
     }
 }

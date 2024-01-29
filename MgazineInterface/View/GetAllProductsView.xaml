@@ -8,8 +8,10 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid Background="White" Grid.Row="1" Margin="24,40,25,15">
-
-            <Button Height="30" Content="Delete selected" Width="100" VerticalContentAlignment="Center" Padding="5"  Margin="25" VerticalAlignment="Top" HorizontalAlignment="Right" BorderThickness="1" BorderBrush="#E0E0E0" Click="Button_Click"/>
+            <ContentControl x:Name="MainContentControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <Button Height="30" Content="Add new" Width="100" VerticalContentAlignment="Center" Padding="5"  Margin="25" VerticalAlignment="Top" HorizontalAlignment="Right" BorderThickness="1" BorderBrush="#E0E0E0" Click="SwitchView"/>
+            <Button Height="30" Content="Delete selected" Width="100" VerticalContentAlignment="Center" Padding="5"  Margin="25" VerticalAlignment="Top" HorizontalAlignment="Left" BorderThickness="1" BorderBrush="#E0E0E0" Click="Button_Click"/>
+            <Button Height="30" Content="Refresh" Width="55" VerticalContentAlignment="Center" Padding="5"  Margin="25" VerticalAlignment="Top" HorizontalAlignment="Center" BorderThickness="1" BorderBrush="#E0E0E0" Click="Refresh"/>
             <ListView Name="UserList" BorderBrush="#cdcdcd" Margin="25,70,25,25" Padding="0">
                 <ListView.View>
                     <GridView>
@@ -21,5 +23,6 @@
                 </ListView.View>
             </ListView>
         </Grid>
+        
     </Grid>
 </UserControl>
