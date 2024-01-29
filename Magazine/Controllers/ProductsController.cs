@@ -29,21 +29,6 @@ namespace Magazine.Controllers
             return Ok(_context.Products.FirstOrDefault(r => r.Id == id));
         }
 
-        [HttpPost("AddProduct")]
-        public IActionResult AddProduct([FromBody] Product product)
-        {
-            if(product == null)
-            {
-                return BadRequest();
-            }
-
-            _context.Products.Add(product);
-            _context.SaveChanges();
-
-
-            return Ok(product);
-        }
-
         [HttpPut("UpdateProductAmount/{product_id}/{amount}")]
         public IActionResult UpdateProductAmount(int  product_id, int amount)
         {

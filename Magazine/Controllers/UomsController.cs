@@ -26,6 +26,13 @@ namespace Magazine.Controllers
             return Ok(uom);
         }
 
+        [HttpGet("GetAllUoms")]
+        public IActionResult GetAllUoms()
+        {
+            var allUoms = _context.Uoms.ToList();
+            return Ok(allUoms);
+        }
+
         [HttpDelete("UomDelete{uom_id}")]
         public void UomDelete(int uom_id)
         {

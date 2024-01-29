@@ -20,21 +20,6 @@ namespace Magazine.Controllers
 
         }
 
-        [HttpPost("AddOrder")]
-        public IActionResult AddOrder([FromBody] Order order)
-        {
-            if (order == null)
-            {
-                return BadRequest();
-            }
-
-            _context.Orders.Add(order);
-            _context.SaveChanges();
-
-
-            return Ok(order);
-        }
-
         
 
         [HttpGet("GetAllOrderandItemsByOrder/{order_id}")]

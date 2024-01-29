@@ -8,7 +8,6 @@ namespace Magazine.Models
         public ClientsJSON() { }
 
 
-        public int Id { get; set; }
         public int? DetailsId { get; set; }
 
     }

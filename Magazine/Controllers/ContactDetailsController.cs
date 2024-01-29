@@ -24,7 +24,6 @@ namespace Magazine.Controllers
                 var detail = new ContactDetail
                 {
 
-
                     Name = detailinput.Name,
                     SecondName = detailinput.SecondName,
                     Phone = detailinput.Phone,
