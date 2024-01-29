@@ -6,11 +6,14 @@
              xmlns:local="clr-namespace:MgazineInterface.View"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    
+
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="350"/>
+            <ColumnDefinition Width="350"/>
+        </Grid.ColumnDefinitions>
+
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -23,25 +26,29 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <Label Content="Dane 1:" Grid.Row="0" Margin="10"/>
+        <Label Content="UserID:" Grid.Row="0" Grid.Column="0" Margin="10"/>
         <TextBox x:Name="textBoxDane1" Grid.Row="1" Margin="10"  />
 
-        <Label Content="Dane 2:" Grid.Row="2" Margin="10" />
-        <TextBox x:Name="textBoxDane2" Grid.Row="3" Margin="10"/>
+        <Label Content="Client ID:" Grid.Row="2" Grid.Column="0" Margin="10" />
+        <TextBox x:Name="textBoxDane2" Grid.Row="3" Grid.Column="0" Margin="10"/>
 
-        <Label Content="Dane 3:" Grid.Row="4" Margin="10" />
-        <TextBox x:Name="textBoxDane3" Grid.Row="5" Margin="10" />
+        <Label Content="Date:" Grid.Row="4" Grid.Column="0" Margin="10" />
+        <TextBox x:Name="textBoxDane3" Grid.Row="5" Grid.Column="0" Margin="10" />
 
-        <Label Name ="Dane" Content="Dane 6:" Grid.Row="6" Margin="10" />
-        <TextBox x:Name="textBoxDane4" Grid.Row="7" Margin="10" />
+        <Label Content="StatusID:" Grid.Row="0" Grid.Column="1" Margin="10" />
+        <TextBox x:Name="textBoxDane4" Grid.Row="1" Grid.Column="1" Margin="10" />
 
-        <Label Name ="TotalValue" Content="Dane 6:" Grid.Row="6" Margin="10" />
-        <TextBox x:Name="textBoxDane5" Grid.Row="7" Margin="10" />
+        <Label Content="TotalValue:" Grid.Row="2" Grid.Column="1" Margin="10" />
+        <TextBox x:Name="textBoxDane5" Grid.Row="3" Grid.Column="1" Margin="10" />
 
-        <Label Name ="TypeID" Content="Dane 6:" Grid.Row="6" Margin="10" />
-        <TextBox x:Name="textBoxDane6" Grid.Row="7" Margin="10" />
+        <Label  Content="TypeID:" Grid.Row="4" Grid.Column="1" Margin="10" />
+        <TextBox x:Name="textBoxDane6" Grid.Row="5" Grid.Column="1" Margin="10" />
+        
+        <Label  Content="ID:" Grid.Row="7" Grid.Column="0" Margin="10" />
+        <TextBox x:Name="textBoxDane7" Grid.Row="8" Grid.Column="0" Margin="10" />
 
-        <Button Content="Dodaj" Grid.Row="8" Margin="10" />
+        <Button Content="Add" Grid.Row="9" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="10" Width="100"/>
+        
     </Grid>
 
 
