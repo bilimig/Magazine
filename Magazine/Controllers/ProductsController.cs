@@ -86,23 +86,20 @@ namespace Magazine.Controllers
 
                 var product = new Product
                 {
-                    Id = productinput.Id,
+                
                     Name = productinput.Name,
                     UomId = productinput.UomId,
                     BaseUnit = productinput.BaseUnit,
                     Amount = productinput.Amount,
 
                 };
-                if (product.Id <= 0 || product.Amount <  0 || product.UomId <= 0 || product.BaseUnit == null || product.Name == null)
+                if (product.Amount <  0 || product.UomId <= 0 || product.BaseUnit == null || product.Name == null)
                 {
                     return BadRequest();
                 }
 
 
-                if (_context.Products.Find(product.Id) != null)
-                {
-                    return BadRequest();
-                }
+            
 
                 if (_context.ContactDetails.Find(product.UomId) == null)
                 {

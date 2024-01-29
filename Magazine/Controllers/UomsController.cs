@@ -44,20 +44,15 @@ namespace Magazine.Controllers
 
                 var uom = new Uom
                 {
-                    Id = uominput.Id,
+                  
                     Name = uominput.Name,
 
                 };
-                if (uom.Id <= 0 || uom.Name == null)
+                if ( uom.Name == null)
                 {
                     return BadRequest();
                 }
 
-
-                if (_context.Uoms.Find(uom.Id) != null)
-                {
-                    return BadRequest();
-                }
                 _context.Uoms.Add(uom);
                 _context.SaveChangesAsync();
 

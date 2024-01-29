@@ -7,7 +7,7 @@ namespace Magazine.Models
     {
        
 
-        public int Id { get; set; }
+
         public int? DetailsId { get; set; }
 
     }
