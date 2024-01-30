@@ -9,8 +9,11 @@
     <Grid>
         <Grid Background="White" Grid.Row="1" Margin="24,40,25,15">
             <ContentControl x:Name="MainContentControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <ComboBox x:Name="comboBoxStatus" Width="25" Margin="546,29,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" DisplayMemberPath="Id" IsEditable="True" SelectedValuePath="Id" SelectionChanged="comboBoxStatus_SelectionChanged" />
             <Button Height="30" Content="Add new" Width="100" VerticalContentAlignment="Center" Padding="5"  Margin="25" VerticalAlignment="Top" HorizontalAlignment="Right" BorderThickness="1" BorderBrush="#E0E0E0" Click="SwitchView"/>
             <Button Height="30" Content="Delete selected" Width="100" VerticalContentAlignment="Center" Padding="5"  Margin="25" VerticalAlignment="Top" HorizontalAlignment="Left" BorderThickness="1" BorderBrush="#E0E0E0" Click="Button_Click"/>
+            <Button Height="30" Content="Change status" Width="100" VerticalContentAlignment="Center" Padding="5"  Margin="146,25,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" BorderThickness="1" BorderBrush="#E0E0E0" Click="ChangeStatus"/>
+
             <Button Height="30" Content="Refresh" Width="55" VerticalContentAlignment="Center" Padding="5"  Margin="25" VerticalAlignment="Top" HorizontalAlignment="Center" BorderThickness="1" BorderBrush="#E0E0E0" Click="Refresh"/>
             <ListView Name="UserList" BorderBrush="#cdcdcd" Margin="25,70,25,25" Padding="0">
                 <ListView.View>
@@ -19,6 +22,7 @@
                         <GridViewColumn Header="Price" Width="100" DisplayMemberBinding="{Binding Price}"/>
                         <GridViewColumn Header="Amount" Width="100" DisplayMemberBinding="{Binding Amount}"/>
                         <GridViewColumn Header="OrderId" Width="100" DisplayMemberBinding="{Binding OrderId}"/>
+                        <GridViewColumn Header="CurrentStatus" Width="100" DisplayMemberBinding="{Binding StatusId}"/>
                     </GridView>
                 </ListView.View>
             </ListView>

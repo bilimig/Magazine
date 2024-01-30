@@ -58,48 +58,45 @@ namespace MgazineInterface.View
         {
             OrderItemsHelper orderItem = new OrderItemsHelper();
 
-
             int product = (int)textBoxDane1.SelectedValue;
-            decimal.TryParse(textBoxDanePrice.Text, out decimal decimalValue);
             int amount = int.Parse(textBoxAmount.Text);
 
-
-            
-            orderItem.ProductId = product;
-            orderItem.Price = decimalValue;
-            orderItem.Amount = amount;
-            orderItem.OrderId = _orderid;
-
-
-            string jsonContent = JsonConvert.SerializeObject(orderItem);
-
-
-
-            using (HttpClient client = new HttpClient())
+            // Użyj decimal.TryParse do wczytania wartości z textBoxDanePrice
+            if (decimal.TryParse(textBoxDanePrice.Text, out decimal decimalValue))
             {
+                orderItem.ProductId = product;
+                orderItem.Price = decimalValue;
+                orderItem.Amount = amount;
+                orderItem.OrderId = _orderid;
 
+                string jsonContent = JsonConvert.SerializeObject(orderItem);
 
-
-                StringContent content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
-
-
-                using (var response = await client.PostAsync("https://localhost:7148/api/OrderItems/AddNewOrderItem", content))
+                using (HttpClient client = new HttpClient())
                 {
-                    if (response.IsSuccessStatusCode)
-                    {
+                    StringContent content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
-                    }
-                    else
+                    using (var response = await client.PostAsync("https://localhost:7148/api/OrderItems/AddNewOrderItem", content))
                     {
-
+                        if (response.IsSuccessStatusCode)
+                        {
+                            // Dodaj kod obsługi po pomyślnym dodaniu
+                        }
+                        else
+                        {
+                            // Dodaj kod obsługi w przypadku niepowodzenia
+                        }
                     }
                 }
 
+                Close();
             }
-
-            Close();
-
+            else
+            {
+                // Komunikat o błędzie dotyczący nieprawidłowego formatu ceny
+                MessageBox.Show("Invalid Price format. Please enter a valid decimal value.");
+            }
         }
+
     }
-    
+
 }

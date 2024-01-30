@@ -252,6 +252,25 @@ namespace Magazine.Controllers
 
         }
 
+        [HttpPut("ChangeOrderTotalValue/{orderid}/{totalAmount}")]
+        public IActionResult ChangeOrderTotalValue(int orderid, decimal totalAmount)
+        {
+            var order = _context.Orders.Find(orderid);
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            
+
+            
+            order.TotalValue = totalAmount;
+            _context.SaveChanges();
+
+            return Ok(order);
+        }
+
 
     }
 }

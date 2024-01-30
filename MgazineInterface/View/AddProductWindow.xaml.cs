@@ -52,6 +52,7 @@ namespace MgazineInterface.View
                         // Handle error
                     }
                 }
+            
             }
 
             private async void Dodaj_Click(object sender, RoutedEventArgs e)
@@ -98,6 +99,10 @@ namespace MgazineInterface.View
             Close();
 
             }
-        
+
+        private void comboBoxUoms_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

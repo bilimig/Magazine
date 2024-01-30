@@ -26,6 +26,7 @@ namespace MgazineInterface.View
     {
 
         private List<OrdersHelper> orders;
+       
 
         public GetAllOrdersView()
         {
@@ -71,13 +72,50 @@ namespace MgazineInterface.View
         }
 
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
+        private async void Button_Click(object sender, RoutedEventArgs e)
+        { 
+         if (UserList.SelectedItem != null)
+            {
+                try
+                {
+                    OrdersHelper selectedOrder = (OrdersHelper)UserList.SelectedItem;
+
+                    using (HttpClient client = new HttpClient())
+                    {
+                        HttpResponseMessage response = await client.DeleteAsync($"https://localhost:7148/api/Orders/DeleteOrder/{selectedOrder.Id}/");
+
+                        if (response.IsSuccessStatusCode)
+                        {
+                            MessageBox.Show("Product removed successfully.");
+                            
+                            await LoadOrdersAsync();
+                        orders.Remove(selectedOrder);
+
+                            UserList.Items.Refresh();
+                        }
+                        else
+                {
+                MessageBox.Show($"Error: {response.ReasonPhrase}");
+                 }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"An error occurred: {ex.Message}");
+                }
+            }
+            else
+{
+    MessageBox.Show("Please select a product to remove.");
+}
 
         }
 
         private void Refresh(object sender, RoutedEventArgs e)
         {
+
+            LoadOrdersAsync();
+            UserList.Items.Refresh();
 
         }
 

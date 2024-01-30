@@ -91,10 +91,10 @@ namespace Magazine.Controllers
         [HttpDelete("DeleteOrderItems/{id}")]        
         public void DeleteOrderItem(int id)
         {
-            var orderitem = _context.Orders.FirstOrDefault(r => r.Id == id);
+            var orderitem = _context.OrderItems.FirstOrDefault(r => r.Id == id);
             if (orderitem != null)
             {
-                _context.Orders.Remove(orderitem);
+                _context.OrderItems.Remove(orderitem);
                 _context.SaveChanges();
             }
 

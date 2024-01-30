@@ -25,6 +25,7 @@ namespace MgazineInterface.View
     public partial class ShowOrderItemsWindow : Window
     {
         private List<OrderItemsHelper> orderItems;
+        private List<OrderStatusHelper> orderStatuses;
 
 
         private int _orderid;
@@ -42,6 +43,7 @@ namespace MgazineInterface.View
         {
             await LoadOrderItemsAsync();
             UserList.Items.Refresh();
+            UpdateTotalValue();
 
         }
 
@@ -65,6 +67,69 @@ namespace MgazineInterface.View
                         {
                             orderItems.Add(orderItemss);
                         }
+                    }
+                    else
+                    {
+                        MessageBox.Show($"Error: {response.ReasonPhrase}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred: {ex.Message}");
+            }
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    HttpResponseMessage response = await client.GetAsync($"https://localhost:7148/api/OrderStatuses/GetAllStatuses/");
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        // Deserialize the response content to a list of UomHelper
+                        var uomsFromApi = JsonConvert.DeserializeObject<List<OrderStatusHelper>>(await response.Content.ReadAsStringAsync());
+
+                        // Populate the ComboBox with the retrieved UOMs
+                        comboBoxStatus.ItemsSource = uomsFromApi;
+                    }
+                    else
+                    {
+                        // Handle error
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred: {ex.Message}");
+            }
+        }
+
+        private async void UpdateTotalValue()
+        {
+            decimal totalValue = 0;
+
+            foreach (OrderItemsHelper orderItem in orderItems)
+            {
+
+                if (orderItem.Amount.HasValue && orderItem.Price.HasValue)
+                {
+                    totalValue += orderItem.Amount.Value * orderItem.Price.Value;
+                }
+            }
+
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                
+                    HttpResponseMessage response = await client.PutAsync($"https://localhost:7148/api/Orders/ChangeOrderTotalValue/{_orderid}/{totalValue}", null);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string jsonResponse = await response.Content.ReadAsStringAsync();
+                       
+
+                        
                     }
                     else
                     {
@@ -130,6 +195,28 @@ namespace MgazineInterface.View
 
         }
 
+
+
+        private async void ChangeStatus(object sender, RoutedEventArgs e)
+        {
+            int currentStatus = (int) comboBoxStatus.SelectedValue;
+            using (HttpClient client = new HttpClient())
+            {
+
+                // Fetch all UOMs from the API
+                var response = await client.PutAsync($"https://localhost:7148/api/Orders/UpdateOrderStatus/{_orderid}/{currentStatus}", null) ;
+
+               
+                
+            }
+
+        }
+
+        private void comboBoxStatus_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
+    
     
 }

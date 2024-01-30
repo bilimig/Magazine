@@ -26,7 +26,7 @@
         <TextBox x:Name="textBoxDane1" Grid.Row="1" Margin="10" Height="30" />
 
         <Label Content="UomID:" Grid.Row="2" Margin="10" Height="25"/>
-        <ComboBox x:Name="comboBoxUoms" Grid.Row="3" Margin="10" Height="30" DisplayMemberPath="Name" SelectedValuePath="Id" IsEditable="True"/>
+        <ComboBox x:Name="comboBoxUoms" Grid.Row="3" Margin="10" Height="30" DisplayMemberPath="Name" SelectedValuePath="Id" IsEditable="True" SelectionChanged="comboBoxUoms_SelectionChanged"/>
 
         <Label Content="BaseUnit:" Grid.Row="4" Margin="10" Height="25"/>
         <TextBox x:Name="textBoxDane3" Grid.Row="5" Margin="10" Height="30"/>
