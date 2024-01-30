@@ -9,21 +9,15 @@
         Title="MainWindow" Height="600" Width="800">
     <Grid>
         <TabControl x:Name="tabControl" SelectionChanged="TabControl_SelectionChanged">
-            <TabItem Header="Add Order">
-                <view:AddOrderView x:Name="addOrderView"/>
-            </TabItem>
+          
             <TabItem Header="Get Orders">
                 <view:GetAllOrdersView x:Name="getAllOrdersView"/>
             </TabItem>
-            <TabItem Header="Add Client">
-                <view:AddClientView x:Name="addClientView"/>
-            </TabItem>
+           
             <TabItem Header="Get Clients">
                 <view:GetAllClients x:Name="getAllClientsView"/>
             </TabItem>
-            <TabItem Header="Add Product">
-                <view:AddProductView x:Name="addProductView"/>
-            </TabItem>
+           
             <TabItem Header="Get Product">
                 <view:GetAllProductsView x:Name="getAllProductsView"/>
             </TabItem>

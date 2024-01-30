@@ -9,16 +9,20 @@
     <Grid Background="#F5F5F5">
         <Grid Background="White" Grid.Row="1" Margin="24,40,25,15">
 
-            <Button Height="30" Content="Add User" Width="100" VerticalContentAlignment="Center" Padding="5"  Margin="25" VerticalAlignment="Top" HorizontalAlignment="Right" BorderThickness="1" BorderBrush="#E0E0E0"/>
+            <ContentControl x:Name="MainContentControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <Button Height="30" Content="Add new" Width="100" VerticalContentAlignment="Center" Padding="5"  Margin="25" VerticalAlignment="Top" HorizontalAlignment="Right" BorderThickness="1" BorderBrush="#E0E0E0" Click="SwitchView"/>
+            <Button Height="30" Content="Delete selected" Width="100" VerticalContentAlignment="Center" Padding="5"  Margin="25" VerticalAlignment="Top" HorizontalAlignment="Left" BorderThickness="1" BorderBrush="#E0E0E0" Click="Button_Click"/>
+            <Button Height="30" Content="Show order items" Width="110" VerticalContentAlignment="Center" Padding="5"  Margin="146,25,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" BorderThickness="1" BorderBrush="#E0E0E0" Click="SwitchToOrderItemWindow"/>
+            <Button Height="30" Content="Refresh" Width="55" VerticalContentAlignment="Center" Padding="5"  Margin="25" VerticalAlignment="Top" HorizontalAlignment="Center" BorderThickness="1" BorderBrush="#E0E0E0" Click="Refresh"/>
             <ListView Name="UserList" BorderBrush="#cdcdcd" Margin="25,70,25,25" Padding="0">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="UserID"  Width="100" DisplayMemberBinding="{Binding Name}"/>
-                        <GridViewColumn Header="ClientID" Width="100" DisplayMemberBinding="{Binding SecondName}"/>
-                        <GridViewColumn Header="Date" Width="100" DisplayMemberBinding="{Binding Telephone}"/>
-                        <GridViewColumn Header="StatusID" Width="100" DisplayMemberBinding="{Binding Address}"/>
-                        <GridViewColumn Header="TotalValue" Width="100" DisplayMemberBinding="{Binding Telephone}"/>
-                        <GridViewColumn Header="TypeID" Width="100" DisplayMemberBinding="{Binding Address}"/>
+                        <GridViewColumn Header="UserID"  Width="100" DisplayMemberBinding="{Binding UserId}"/>
+                        <GridViewColumn Header="ClientID" Width="100" DisplayMemberBinding="{Binding ClientId}"/>
+                        <GridViewColumn Header="Date" Width="100" DisplayMemberBinding="{Binding Date}"/>
+                        <GridViewColumn Header="StatusID" Width="100" DisplayMemberBinding="{Binding StatusId}"/>
+                        <GridViewColumn Header="TotalValue" Width="100" DisplayMemberBinding="{Binding TotalValue}"/>
+                        <GridViewColumn Header="TypeID" Width="100" DisplayMemberBinding="{Binding TypeId}"/>
                     </GridView>
                 </ListView.View>
             </ListView>

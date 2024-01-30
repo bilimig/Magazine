@@ -13,37 +13,39 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace MgazineInterface.View
 {
     /// <summary>
-    /// Logika interakcji dla klasy AddProductView.xaml
+    /// Logika interakcji dla klasy AddOrderItemWindow.xaml
     /// </summary>
-    public partial class AddProductView : UserControl
+    public partial class AddOrderItemWindow : Window
     {
-        private List<UomHelper> uoms = new List<UomHelper>();
-
-        public AddProductView()
+        private List<ProductHelper> products;
+        private int _orderid;
+        public AddOrderItemWindow(int orderid)
         {
             InitializeComponent();
-           //LoadUomsAsync();
+            _orderid = orderid;
+
+            LoadProductsAsync();
         }
-        private async void LoadUomsAsync()
+
+        private async void LoadProductsAsync()
         {
             using (HttpClient client = new HttpClient())
             {
                 // Fetch all UOMs from the API
-                var response = await client.GetAsync("https://localhost:7148/api/Uoms/GetAllUoms");
+                var response = await client.GetAsync("https://localhost:7148/api/Products/GetAllProducts");
 
                 if (response.IsSuccessStatusCode)
                 {
                     // Deserialize the response content to a list of UomHelper
-                    var uomsFromApi = JsonConvert.DeserializeObject<List<UomHelper>>(await response.Content.ReadAsStringAsync());
+                    var productsFromApi = JsonConvert.DeserializeObject<List<ProductHelper>>(await response.Content.ReadAsStringAsync());
 
                     // Populate the ComboBox with the retrieved UOMs
-                    comboBoxUoms.ItemsSource = uomsFromApi;
+                    textBoxDane1.ItemsSource = productsFromApi;
                 }
                 else
                 {
@@ -51,46 +53,53 @@ namespace MgazineInterface.View
                 }
             }
         }
-        
+
         private async void Dodaj_Click(object sender, RoutedEventArgs e)
         {
-            ProductsJSON product = new ProductsJSON();
-
-            int.TryParse(textBoxDane4.Text, out int amount);
-            int.TryParse(comboBoxUoms.Text, out int uom);
-            // Tutaj dodaj logikę obsługującą dodawanie danych
-            product.Name = textBoxDane1.Text;
-            product.UomId = uom;
-            product.BaseUnit = textBoxDane3.Text;
-            product.Amount = amount;
+            OrderItemsHelper orderItem = new OrderItemsHelper();
 
 
-            string jsonContent = JsonConvert.SerializeObject(product);
+            int product = (int)textBoxDane1.SelectedValue;
+            decimal.TryParse(textBoxDanePrice.Text, out decimal decimalValue);
+            int amount = int.Parse(textBoxAmount.Text);
 
-           
+
+            
+            orderItem.ProductId = product;
+            orderItem.Price = decimalValue;
+            orderItem.Amount = amount;
+            orderItem.OrderId = _orderid;
+
+
+            string jsonContent = JsonConvert.SerializeObject(orderItem);
+
+
 
             using (HttpClient client = new HttpClient())
             {
 
 
-                // Przygotuj dane do wysłania jako JSON
+
                 StringContent content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
-                // Wysyłanie żądania POST na odpowiedni endpoint (załóżmy, że endpoint to "/api/Clients/AddClient")
-                using (var response = await client.PostAsync("https://localhost:7148/api/Products/AddNewProduct", content))
+
+                using (var response = await client.PostAsync("https://localhost:7148/api/OrderItems/AddNewOrderItem", content))
                 {
                     if (response.IsSuccessStatusCode)
                     {
-                        // Obsługa sukcesu
+
                     }
                     else
                     {
-                        // Obsługa błędu
+
                     }
                 }
 
             }
 
+            Close();
+
         }
     }
+    
 }

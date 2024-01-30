@@ -88,7 +88,7 @@ namespace Magazine.Controllers
         }
 
 
-        [HttpDelete]        
+        [HttpDelete("DeleteOrderItems/{id}")]        
         public void DeleteOrderItem(int id)
         {
             var orderitem = _context.Orders.FirstOrDefault(r => r.Id == id);

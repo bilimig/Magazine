@@ -17,6 +17,15 @@ namespace Magazine.Controllers
             _context = context;
         }
 
+
+        [HttpGet("GetAllClientsWithDetails")]
+        public IActionResult GetAllClientsWithDetails()
+        {
+            return Ok(_context.Clients.Include(client => client.Details).ToList());
+
+        }
+
+
         // GET: api/<ContactDetailsController>
         [HttpPost("AddNewClient")]
         public IActionResult AddNewClient([FromBody] ClientInput clientinput)

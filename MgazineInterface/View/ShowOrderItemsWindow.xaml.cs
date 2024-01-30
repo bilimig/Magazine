@@ -13,52 +13,57 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace MgazineInterface.View
 {
     /// <summary>
-    /// Logika interakcji dla klasy GetAllClients.xaml
+    /// Logika interakcji dla klasy ShowOrderItemsWindow.xaml
     /// </summary>
-    public partial class GetAllClients : UserControl
+    /// 
+
+    public partial class ShowOrderItemsWindow : Window
     {
-        private List<ClientsHelper> clients;
-        public GetAllClients()
+        private List<OrderItemsHelper> orderItems;
+
+
+        private int _orderid;
+        public ShowOrderItemsWindow(int orderid)
         {
             InitializeComponent();
-            clients = new List<ClientsHelper>();
-            UserList.ItemsSource = clients;
+            orderItems = new List<OrderItemsHelper>();
+            UserList.ItemsSource = orderItems;
+            _orderid = orderid;
 
-
-            LoadClients();
+            LoadOrderItems();
         }
-        private async Task LoadClients()
+
+        private async Task LoadOrderItems()
         {
-            await LoadClientsAsync();
+            await LoadOrderItemsAsync();
             UserList.Items.Refresh();
 
         }
 
-        private async Task LoadClientsAsync()
+        private async Task LoadOrderItemsAsync()
         {
             try
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    HttpResponseMessage response = await client.GetAsync("https://localhost:7148/api/Clients/GetAllClientsWithDetails/");
+                    HttpResponseMessage response = await client.GetAsync($"https://localhost:7148/api/Orders/GetAllOrderandItemsByOrder/{_orderid}");
 
                     if (response.IsSuccessStatusCode)
                     {
 
                         string jsonResponse = await response.Content.ReadAsStringAsync();
-                        var clientList = JsonConvert.DeserializeObject<List<ClientsHelper>>(jsonResponse);
+                        var orderItemsList = JsonConvert.DeserializeObject<List<OrderItemsHelper>>(jsonResponse);
 
 
-                        clients.Clear();
-                        foreach (var clientt in clientList)
+                        orderItems.Clear();
+                        foreach (var orderItemss in orderItemsList)
                         {
-                            clients.Add(clientt);
+                            orderItems.Add(orderItemss);
                         }
                     }
                     else
@@ -73,25 +78,37 @@ namespace MgazineInterface.View
             }
         }
 
+        private void Refresh(object sender, RoutedEventArgs e)
+        {
+            LoadOrderItems();
+        }
+
+        private void SwitchView(object sender, RoutedEventArgs e)
+        {
+            AddOrderItemWindow anotherWindow = new AddOrderItemWindow(_orderid);
+
+
+            anotherWindow.Show();
+        }
+
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
             if (UserList.SelectedItem != null)
             {
                 try
                 {
-                    ClientsHelper selectedClients = (ClientsHelper)UserList.SelectedItem;
-
+                    OrderItemsHelper selectedOrderItems = (OrderItemsHelper)UserList.SelectedItem;
 
                     using (HttpClient client = new HttpClient())
                     {
-                        HttpResponseMessage response = await client.DeleteAsync($"https://localhost:7148/api/Clients/DeleteClient/{selectedClients.Id}/");
+                        HttpResponseMessage response = await client.DeleteAsync($"https://localhost:7148/api/OrderItems/DeleteOrderItems/{selectedOrderItems.Id}/");
 
                         if (response.IsSuccessStatusCode)
                         {
                             MessageBox.Show("Product removed successfully.");
-
-                            await LoadClientsAsync();
-                            clients.Remove(selectedClients);
+                            
+                            await LoadOrderItemsAsync();
+                            orderItems.Remove(selectedOrderItems);
 
                             UserList.Items.Refresh();
                         }
@@ -113,27 +130,6 @@ namespace MgazineInterface.View
 
         }
 
-
-
-
-
-        private void SwitchView(object sender, RoutedEventArgs e)
-        {
-            AddClientWindow anotherWindow = new AddClientWindow();
-
-
-            anotherWindow.Show();
-
-        }
-
-        
-
-        private void Refresh(object sender, RoutedEventArgs e)
-        {
-            LoadClients();
-
-        }
-
-        
     }
+    
 }

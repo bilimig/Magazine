@@ -25,14 +25,14 @@ namespace Magazine.Controllers
         [HttpGet("GetAllOrderandItemsByOrder/{order_id}")]
         public IActionResult GetAllOrderandItemsByOrder(int order_id)
         {
-            var current_order = _context.Orders.Include(order => order.OrderItems).Where(o=> o.Id == order_id).ToList();
+            var orderItems = _context.OrderItems.Where(item => item.OrderId == order_id).ToList();
 
-            if (current_order == null)
+            if (orderItems == null)
             {
                 return NotFound();
             }
 
-            return Ok(current_order);
+            return Ok(orderItems);
         }
 
         [HttpGet("GetOrderStatusByOrderId/{order_id}")]

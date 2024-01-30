@@ -80,6 +80,13 @@ namespace Magazine.Controllers
             return Ok(false);
         }
 
+        [HttpGet("GetAllUsers")]
+        public IActionResult GetAllUsers()
+        {
+            return Ok(_context.Users.ToList());
+        }
+
+
     }
 
 }

@@ -15,6 +15,87 @@ namespace Magazine.Controllers
             _context = context;
         }
 
+        [HttpGet("GetAllContactDetails")]
+        public IActionResult GetAllContactDetails()
+        {
+            return Ok(_context.ContactDetails.ToList());
+        }
+
+        [HttpPost("AddNewClientContactDetails")]
+        public IActionResult AddNewClientContactDetails([FromBody] ContactDetailInput detailinput)
+        {
+            if (ModelState.IsValid)
+            {
+
+                var detail = new ContactDetail
+                {
+
+                    Name = detailinput.Name,
+                    SecondName = detailinput.SecondName,
+                    Phone = detailinput.Phone,
+                    Address = detailinput.Address,
+                };
+
+                if (detail.Name == null || detail.SecondName == null || detail.Phone == null || detail.Address == null)
+         {
+                    return BadRequest();
+                }
+
+                _context.ContactDetails.Add(detail);
+                _context.SaveChanges();
+                var client = new Client { DetailsId = detail.Id };
+
+                _context.Clients.Add(client);
+                _context.SaveChanges();
+
+                return Ok(new { Message = "Details added successfully.", DetailId = detail.Id });
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
+        }
+        [HttpPost("AddNewUserContactDetails")]
+        public IActionResult AddNewUserContactDetails([FromBody] ContactDetailInput detailinput)
+        {
+            if (ModelState.IsValid)
+            {
+
+                var detail = new ContactDetail
+                {
+
+                    Name = detailinput.Name,
+                    SecondName = detailinput.SecondName,
+                    Phone = detailinput.Phone,
+                    Address = detailinput.Address,
+                };
+
+                if (detail.Name == null || detail.SecondName == null || detail.Phone == null || detail.Address == null)
+         {
+                    return BadRequest();
+                }
+
+                _context.ContactDetails.Add(detail);
+                _context.SaveChanges();
+                var client = new Client { DetailsId = detail.Id };
+
+                _context.Clients.Add(client);
+                _context.SaveChanges();
+
+                return Ok(new { Message = "Details added successfully.", DetailId = detail.Id });
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
+        }
+
+
+
+
+
+
+
         [HttpPost("AddNewContactDetails")]
         public IActionResult AddNewContactDetails([FromBody] ContactDetailInput detailinput)
         {

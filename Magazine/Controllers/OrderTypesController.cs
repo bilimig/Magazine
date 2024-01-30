@@ -64,5 +64,12 @@ namespace Magazine.Controllers
                 _context.SaveChanges();
             }
         }
+
+        [HttpGet("GetAllTypes")]
+        public IActionResult GetAllTypes()
+        {
+            return Ok(_context.OrderTypes.ToList());
+        }
+
     }
 }

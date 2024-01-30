@@ -68,6 +68,7 @@ namespace Magazine.Controllers
         {
             if (ModelState.IsValid)
             {
+                
 
                 var product = new Product
                 {
@@ -86,12 +87,21 @@ namespace Magazine.Controllers
 
             
 
-                if (_context.ContactDetails.Find(product.UomId) == null)
+               
+
+                var checkingProduct = _context.Products.Where(p => p.Name == product.Name && p.UomId == product.UomId && p.BaseUnit == product.BaseUnit).FirstOrDefault();
+
+                if (checkingProduct != null)
                 {
-                    return BadRequest();
+                    checkingProduct.Amount += productinput.Amount;
+                }
+                else
+                {
+                    _context.Products.Add(product);
+
                 }
 
-                _context.Products.Add(product);
+                
                 _context.SaveChangesAsync();
 
                 return Ok(new { Message = "Product added successfully.", Product = product.Id });
